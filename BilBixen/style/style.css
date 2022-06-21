@@ -1,0 +1,467 @@
+/* .card-context{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+} */
+
+p {
+  padding: 0;
+  margin: 0 !important;
+}
+
+h4 {
+  margin: 0;
+  padding: 0;
+}
+
+div.scrollmenu {
+    /* background-color: #333; */
+    overflow: auto;
+    white-space: nowrap;
+    min-height: 377px;
+  }
+  
+  div.scrollmenu .card-block {
+    display: inline-block;
+    color: black;
+    text-align: center;
+    padding:14px;
+    text-decoration: none;
+  }
+  
+  div.scrollmenu a:hover {
+    background-color: #777;
+  }
+
+.card-block{
+    position: relative;
+    margin-right: 10px;
+
+    
+}
+.img_style{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 230px;
+    height: 159px;
+    /* width: auto;
+    height: auto; */
+}
+.container11 {
+  margin: auto 200px;
+}
+/* 
+.bilText {
+  margin: auto 300px;
+} */
+
+
+.car__price {
+  position: absolute;
+  top: 155px;
+  left: 28px;
+  background-color: #1E90FF;
+  text-align: center;
+}
+.car__price-info{
+  position: absolute;
+  top: 146px;
+  left: 28px;
+  background-color: #1E90FF;
+  text-align: center;
+  margin: 0;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 0 7px !important;
+}
+
+
+.kom {
+  /* position: absolute; */
+  display:inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 229px;
+  top: 148px;
+  width: 30px;
+  height: 25px;
+  border-radius: 12px;
+  background-color: #1E90FF;
+  color: white;
+  font-size: 14px;
+}
+.kom:after {
+  content: '';
+  position: absolute;
+  background-color: #1E90FF;
+  top: 89%;
+  left: 47%;
+  width: 3px;
+  height: 7px;
+  transform: rotate(-45deg);
+}
+
+.kom:before {
+  content: '';
+  position: absolute;
+  background-color: #1E90FF;
+  top: 83%;
+  left: 60%;
+  width: 3px;
+  height: 7px;
+  transform: rotate(45deg);
+}
+
+
+.content{
+  margin-bottom: 40px;
+}
+
+.btn-buy {
+  font-size: 28px !important;
+  line-height: 32px !important;
+  padding: 4px 174px !important;
+}
+
+
+.bil__detail-info {
+  text-align: center;
+}
+
+.logIn__input {
+  visibility: hidden;
+  display: none;
+}
+
+
+
+
+/* DETAIL */
+
+
+.bil__container {
+  /* margin: auto 6%; */
+  margin-left: 6%;
+  margin-right: 6%;
+}
+
+.bil__img {
+  width: 640px;
+  height: 450px;
+}
+
+.detail__header {
+  font-size: 36px;
+  line-height: 40px;
+}
+
+.detail__paragraf {
+  font-size: 28px;
+  line-height: 32px;
+}
+
+.detail__content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img__content {
+  margin-right: 50px;
+}
+
+
+
+.kommentar__scroll {
+  
+  height: 300px;
+  width: 640px;
+  min-width: 640px;
+  overflow-y: scroll;
+  border: 1px solid black;
+  padding:  10px 10px;
+}
+
+.kommentar__name {
+  font-size: 32px;
+  line-height: 38px;
+}
+
+.kommentar__date {
+  font-style: italic;
+}
+.bil__block {
+  padding: 4px 50px;
+  background-color: rgba(194, 188, 188, 0.4);
+  margin-bottom: 7px;
+}
+
+.common {
+  font-size: 24px;
+  line-height: 32px;
+}
+
+.kommentar__info {
+  word-wrap: break-word;
+  margin-bottom: 10px;
+
+}
+
+
+.heading {
+  margin-left: 15%;
+  margin-top: 30px;
+  align-items: center;
+
+}
+
+.common-label {
+  font-size: 24px;
+  line-height: 32px;
+}
+
+
+
+
+/* Kommentar */
+
+.kommentar__form{
+margin-left: 50px;
+}
+
+.kommentar__input {
+  display: block;
+  width: 491.33px;
+  height: 49px;
+  margin-bottom: 12px;
+  padding: 5px 5px;
+  background-color: rgba(194, 188, 188, 0.4);
+  border: 0;
+}
+.text-common{
+  background-color: rgba(194, 188, 188, 0.4);
+  border: 0;
+}
+.main__content {
+  display: flex;
+  justify-content: center;
+}
+
+
+.kommentar__text{
+  display: block;
+  resize: none;
+  padding: 5px 5px;
+  /* background-color: rgba(194, 188, 188, 0.4); */
+}
+
+
+.btn-komm{
+  margin-top: 20px !important;
+  font-size: 24px !important;
+  line-height: 32px !important;
+  padding: 10px 136px !important;
+  margin-bottom: 20px;
+}
+
+
+
+
+/* INDEX PAGE */
+
+.car__main-heading {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.heading__block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* .pb1{
+  margin-left: 132px;
+}
+
+.vr1{
+  margin-left: 129px;
+}
+
+.vb1{
+  margin-left: 100px;
+} */
+
+.heading__bil{
+  min-width: 403px;
+  text-align: center;
+}
+
+.heading__bil:not(:last-child){
+  margin-right: 25px;
+}
+.heading__block-title {
+  font-size: 32px;
+  line-height: 32px;
+  margin-bottom: 5px;
+}
+.cars__block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.common__car:not(:last-child){
+  margin-right:25px;
+}
+
+.common__car {
+  width: 407px;
+  border: 2px solid rgba(0,0,0,.125);
+}
+.car__front-billede {
+  width: 375px;
+  height: 280px;
+}
+
+.front-card {
+  position: relative;
+  text-align: center;
+  padding: 10px 5px;
+  /* margin-right: 150px; */
+}
+
+.car__front-price {
+  position: absolute;
+  top: 252px;
+  left: 14px;
+  background-color: #1E90FF;
+  text-align: center;
+  margin: 0;
+  color: white;
+  font-size: 25px;
+  font-weight: bold;
+  padding: 0 7px !important;
+}
+
+.car__front-kommentar {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 350px;
+  top: 253px;
+  width: 40px;
+  height: 35px;
+  border-radius: 12px;
+  background-color: #1E90FF;
+  color: white;
+  font-size: 14px;
+}
+
+
+.car__front-kommentar:after {
+  content: '';
+  position: absolute;
+  background-color: #1E90FF;
+  top: 83%;
+  left: 46%;
+  width: 9px;
+  height: 12px;
+  transform: rotate(-45deg);
+}
+
+.car__front-kommentar:before {
+  content: '';
+  position: absolute;
+  background-color: #1E90FF;
+  top: 83%;
+  left: 52%;
+  width: 9px;
+  height: 12px;
+  transform: rotate(45deg);
+}
+
+
+.card__front-title {
+  font-size: 28px;
+  line-height: 32px;
+}
+
+.car__front-year,
+.car__front-km {
+  font-size: 24px;
+  line-height: 45px;
+}
+
+.btn-front-page {
+  font-size: 24px !important;
+}
+
+
+
+/* FOOTER */
+
+.footer {
+  background-image: url("../img/hjemmesiden/footer__2-layout.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 390px;
+  /* height: 500px; */
+  /* height: 100%;
+  background-size: cover;
+  width: 100%;
+  position: relative;
+  z-index: 100; */
+}
+
+
+.footer__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer__header {
+  display: block;
+  margin-top: 40px; 
+  color: #ffffff;
+  font-size: 28px;
+  line-height: 32px;
+}
+
+.footer__addresse {
+  display: flex;
+  color: #ffffff;
+  font-size: 18px;
+  line-height: 20px;
+  font-weight: bold;
+}
+
+
+
+/* LOG IND */
+
+.log__form{
+position: absolute;
+left: 42%;
+top:20%;
+
+}
+
+.log__input {
+  display: block;
+  margin-bottom: 10px;
+  width: 350px;
+  height: 50px;
+  padding: 5px;
+  font-size: 24px;
+}
