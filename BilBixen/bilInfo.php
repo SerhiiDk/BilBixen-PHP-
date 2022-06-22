@@ -103,6 +103,9 @@ session_start();
           }
 
           // ADMIN OG FORHANDLER
+          if(!isset($_SESSION['loggedIn'])){
+          }
+          else{
           if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3){
             foreach($resultKommentarAdmin as $row){
               echo"<form class='kommentar__info' method='POST' action='bilInfo.php'>";
@@ -132,6 +135,8 @@ session_start();
               }
             }
           }
+        }
+
         
         ?>
 
