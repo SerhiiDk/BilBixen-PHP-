@@ -1,6 +1,7 @@
 <?php
 
 include_once "bilbixenDatabase.php";
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -18,45 +19,18 @@ include_once "bilbixenDatabase.php";
     <title>BilBixen</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="index.php">Logo</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-      
-          <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav me-auto">
-              <li class="nav-item">
-                <a class="nav-link active" href="index.php">Hjem
-                  <span class="visually-hidden">(current)</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="katalog.php">Katalog</a>
-              </li>
-            </ul>
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                  <a class="nav-link active" href="login.php">Log ind</a>  
-                </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-<?php
-
+<?php 
+  include_once "navbar.php";
 ?>
-    
-
 
 <?php
-session_start();
 
 $dbBilerTabel = "biler";
 $dbKomTabel = "kommentar";
 
 echo "<section class='cars-content container11 content'>";
+
+//Personbiler
 
 echo "<h3>Personbiler</h3>";
 
@@ -68,21 +42,56 @@ if ($resultPersonbiler = mysqli_query($conn, $sqlPersonbiler)) {
     $bilId = $row['id'];
     $sqlAntalKommentar = "SELECT COUNT(*) AS antal FROM $dbKomTabel WHERE bilid = $bilId AND status=1";
     $resultAntalKommentar = mysqli_query($conn, $sqlAntalKommentar);
-    if($rowAntalKommentarer = mysqli_fetch_array($resultAntalKommentar)){
+    $rowAntalKommentarer = mysqli_fetch_array($resultAntalKommentar);
+
+    $sqlAntalKommentarAdmin = "SELECT COUNT(*) AS antal FROM $dbKomTabel WHERE bilid = $bilId AND status=2";
+    $resultAntalKommentarAdmin = mysqli_query($conn, $sqlAntalKommentarAdmin);
+    $rowAntalKommentarerAdmin = mysqli_fetch_array($resultAntalKommentarAdmin);
+
         echo "<form class='card card-block' style='width: 18rem;' method='POST' action='bilInfo.php'>";
 
         echo "<input class='logIn__input name' name='bilId' value=".$row['id']." >";
 
         echo "<img src='" .$row['billede']. "' class='img_style' alt='...'>";
-        echo "<div class='kom'>".$rowAntalKommentarer['antal']."</div>";
-        echo "<p class='car__price-info'>".number_format($row['pris'],0,"",".")." DKK</p>";
+
+        if(!isset($_SESSION['loggedIn'])){
+          echo "<div class='kom'>".$rowAntalKommentarer['antal']."</div>";
+        }
+        else {
+          if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3 ){
+            if( $rowAntalKommentarerAdmin['antal'] > 0){
+              echo "<div class='kom'><span>".$rowAntalKommentarer['antal']."(".$rowAntalKommentarerAdmin['antal'].")"."</span></div>";
+              goto a;
+            }
+            echo "<div class='kom'><span>".$rowAntalKommentarer['antal']."</span></div>";
+            a:;
+          }
+          else {
+            // til hjemmebruger
+          }
+        }
+
+        if(!isset($_SESSION['loggedIn'])){
+          echo "<p class='car__price-info'>".number_format($row['pris'],0,"",".")." DKK</p>";
+        }
+        else {
+          if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3 ){
+            echo "<p class='car__price-info'>".number_format(($row['pris'] * 0.8),0,"",".")." DKK</p>";
+          }
+          else {
+            // til hjemmebruger
+          }
+        }
+
         if(strlen($row['model']) <= 23 ) {
           echo "<h5 class='card-title'>".$row['model']."</h5>";
         }
         else {
           echo "<h5 class='card-title'>".substr_replace($row['model'],"...", 21)."</h5>";
         }
+
         echo "<p class='card-text'>"."Årgang: ".substr_replace($row['først registreret'],"", 4)."</p>";
+
         if ($row['kørt kilometer'] > 0){
           echo  "<p class='card-text'>"."KM - ".number_format($row['kørt kilometer'],0,"",".")."</p>";
         }
@@ -94,7 +103,6 @@ if ($resultPersonbiler = mysqli_query($conn, $sqlPersonbiler)) {
         echo "<button  type='submit' class='btn btn-primary'>Se alle informationer</button>";
         // echo "</div>"; 
         echo "</form>";
-    }
     }
     echo "</div>";
 }
@@ -120,29 +128,66 @@ if ($resultVrag = mysqli_query($conn, $sqlVrag)) {
     $bilId = $row['id'];
     $sqlAntalKommentar = "SELECT COUNT(*) AS antal FROM $dbKomTabel WHERE bilid = $bilId AND status=1";
     $resultAntalKommentar = mysqli_query($conn, $sqlAntalKommentar);
-    if($rowAntalKommentarer = mysqli_fetch_array($resultAntalKommentar)){
+    $rowAntalKommentarer = mysqli_fetch_array($resultAntalKommentar);
+
+    $sqlAntalKommentarAdmin = "SELECT COUNT(*) AS antal FROM $dbKomTabel WHERE bilid = $bilId AND status=2";
+    $resultAntalKommentarAdmin = mysqli_query($conn, $sqlAntalKommentarAdmin);
+    $rowAntalKommentarerAdmin = mysqli_fetch_array($resultAntalKommentarAdmin);
+
       echo "<form class='card card-block' style='width: 18rem;'  method='POST' action='bilInfo.php'>";
       echo "<input class='logIn__input name' name='bilId' value=".$row['id']." >";
         echo "<img src='" .$row['billede']. "' class='img_style' alt='...'>";
-        echo "<div class='kom'>".$rowAntalKommentarer['antal']."</div>";
-        echo "<p class='car__price-info'>".number_format($row['pris'],0,"",".")." DKK</p>";
+
+        if(!isset($_SESSION['loggedIn'])){
+          echo "<div class='kom'>".$rowAntalKommentarer['antal']."</div>";
+        }
+        else {
+          if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3 ){
+            if( $rowAntalKommentarerAdmin['antal'] > 0){
+              echo "<div class='kom'>".$rowAntalKommentarer['antal']."(".$rowAntalKommentarerAdmin['antal'].")"."</div>";
+              goto b;
+            }
+            echo "<div class='kom'>".$rowAntalKommentarer['antal']."</div>";
+            b:;
+          }
+          else {
+            // til hjemmebruger
+          }
+        }
+        
+
+
+        if(!isset($_SESSION['loggedIn'])){
+          echo "<p class='car__price-info'>".number_format($row['pris'],0,"",".")." DKK</p>";
+        }
+        else {
+          if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3 ){
+            echo "<p class='car__price-info'>".number_format(($row['pris'] * 0.8),0,"",".")." DKK</p>";
+          }
+          else {
+            // til hjemmebruger
+          }
+        }
+
         if(strlen($row['model']) <= 23 ) {
           echo "<h5 class='card-title'>".$row['model']."</h5>";
         }
         else {
           echo "<h5 class='card-title'>".substr_replace($row['model'],"...", 21)."</h5>";
         }
+
         echo "<p class='card-text'>"."Årgang: ".substr_replace($row['først registreret'],"", 4)."</p>";
+
         if ($row['kørt kilometer'] > 0){
           echo  "<p class='card-text'>"."KM - " .number_format($row['kørt kilometer'],0,"",".")."</p>";
         }
         else {
           echo  "<p class='card-text'>"."KM - "."ikke oplyst"."</p>";
         }
+
         echo "<button type='submit' class='btn btn-primary'>Se alle informationer</button>";
         // echo "</div>"; 
         echo "</form>";
-    }
     }
     echo "</div>";
 }
@@ -156,7 +201,7 @@ echo "</section>";
 
 
 
-//LastVogne
+//Varebiler
 
 echo "<section class='cars-content container11 content'>";
 
@@ -169,29 +214,64 @@ if ($resultVarebiler = mysqli_query($conn, $sqlVarebiler)) {
     $bilId = $row['id'];
     $sqlAntalKommentar = "SELECT COUNT(*) AS antal FROM $dbKomTabel WHERE bilid = $bilId AND status=1";
     $resultAntalKommentar = mysqli_query($conn, $sqlAntalKommentar);
-    if($rowAntalKommentarer = mysqli_fetch_array($resultAntalKommentar)){
+    $rowAntalKommentarer = mysqli_fetch_array($resultAntalKommentar);
+
+    $sqlAntalKommentarAdmin = "SELECT COUNT(*) AS antal FROM $dbKomTabel WHERE bilid = $bilId AND status=2";
+    $resultAntalKommentarAdmin = mysqli_query($conn, $sqlAntalKommentarAdmin);
+    $rowAntalKommentarerAdmin = mysqli_fetch_array($resultAntalKommentarAdmin);
+
       echo "<form class='card card-block' style='width: 18rem;'  method='POST' action='bilInfo.php'>";
       echo "<input class='logIn__input name' name='bilId' value=".$row['id']." >";
         echo "<img src='" .$row['billede']. "' class='img_style' alt='...'>";
-        echo "<div class='kom'>".$rowAntalKommentarer['antal']."</div>";
-        echo "<p class='car__price-info' name='hidden_price'>".number_format($row['pris'],0,"",".")." DKK</p>";
+
+        if(!isset($_SESSION['loggedIn'])){
+          echo "<div class='kom'>".$rowAntalKommentarer['antal']."</div>";
+        }
+        else {
+          if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3 ){
+            if( $rowAntalKommentarerAdmin['antal'] > 0){
+              echo "<div class='kom'>".$rowAntalKommentarer['antal']."(".$rowAntalKommentarerAdmin['antal'].")"."</div>";
+              goto c;
+            }
+            echo "<div class='kom'>".$rowAntalKommentarer['antal']."</div>";
+            c:;
+          }
+          else {
+            // til hjemmebruger
+          }
+        }
+
+        if(!isset($_SESSION['loggedIn'])){
+          echo "<p class='car__price-info'>".number_format($row['pris'],0,"",".")." DKK</p>";
+        }
+        else {
+          if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3 ){
+            echo "<p class='car__price-info'>".number_format(($row['pris'] * 0.8),0,"",".")." DKK</p>";
+          }
+          else {
+            // til hjemmebruger
+          }
+        }
+
         if(strlen($row['model']) <= 23 ) {
           echo "<h5 class='card-title'>".$row['model']."</h5>";
         }
         else {
           echo "<h5 class='card-title'>".substr_replace($row['model'],"...", 21)."</h5>";
         }
+
         echo "<p class='card-text'>"."Årgang: ".substr_replace($row['først registreret'],"", 4)."</p>";
+
         if ($row['kørt kilometer'] > 0){
           echo  "<p class='card-text'>"."KM - " .number_format($row['kørt kilometer'],0,"",".")."</p>";
         }
         else {
           echo  "<p class='card-text'>"."KM - "."ikke oplyst"."</p>";
         }
+
         echo "<button class='btn btn-primary vrag__btn' name='btn' type='submit'>Se alle informationer</button>";
         // echo "</div>"; 
         echo "</form>";
-    }
     }
     echo "</div>";
 }

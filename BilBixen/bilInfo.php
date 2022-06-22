@@ -1,6 +1,6 @@
 <?php
-
 include_once "bilbixenDatabase.php";
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -18,37 +18,14 @@ include_once "bilbixenDatabase.php";
     <title>BilInfo</title>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="index.php">Logo</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-      
-          <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav me-auto">
-              <li class="nav-item">
-              <a class="nav-link active" href="index.php">Hjem
-                  <span class="visually-hidden">(current)</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="katalog.php">Katalog</a>
-              </li>
-            </ul>
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                  <a class="nav-link active" href="login.php">Log ind</a>  
-                </li>
-            </ul>
-          </div>
-        </div>
-</nav>
+<?php 
+  include_once "navbar.php";
+?>
     <section class='bil__container'>
         <h2 class="bilInfo__heading heading">Detaljer</h2>
         <?php
-            $getBilId = $_POST['bilId'];
-            //$getBilId = 1;
+            //$getBilId = $_POST['bilId'];
+            $getBilId = 1;
             $dbBilTable = "biler";
             $dbKommentar = "kommentar";
             
@@ -60,7 +37,6 @@ include_once "bilbixenDatabase.php";
             $bilInfo = mysqli_fetch_array($resultBil);
 
             $resultKommentar =  mysqli_query($conn, $sqlkommentar);
-            $bilKommentar = mysqli_fetch_array($resultKommentar);
 
             echo "<div class='detail__content bilText'>";
 
@@ -83,7 +59,18 @@ include_once "bilbixenDatabase.php";
                       echo  "<p class='detail__paragraf'>"."ikke oplyst"."</p>";
                     }
                     echo "</div>";
-                    echo "<buton class='btn btn-primary btn-buy'> Pris <br>" .number_format($bilInfo['pris'],0,"",".")." DKK </button>";
+                    if(!isset($_SESSION['loggedIn'])){
+                      echo "<div class='bil__block-btn'><p class='btn-pris'> Pris <br>" .number_format($bilInfo['pris'],0,"",".")." DKK </p></div>";
+                    }
+                    else {
+                      if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3 ){
+                        echo "<div class='bil__block-btn'><p class='btn-pris'> Pris <br>" .number_format(($bilInfo['pris'] * 0.8),0,"",".")." DKK </p></div>";
+                      }
+                      else {
+                        // til hjemmebruger
+                      }
+                    }
+
                 echo "</div>";
 
 
@@ -101,14 +88,46 @@ include_once "bilbixenDatabase.php";
         <div class="kommentar__scroll">
 
         <?php
-            foreach($resultKommentar as $row){
-                echo"<div class='kommentar__info'>";
-                    echo "<h4 class='kommentar__name'>".$row['navn']."</h4>";
-                    echo "<p class='kommentar__date common'>".$row['dato']."</p>";
-                    echo "<p class='kommentar__text common'>".$row['text']."</p>";
-                    echo "<hr>";
-                echo"</div>";
+
+          $sqlkommentarAdmin = "SELECT * FROM $dbKommentar WHERE bilID = $getBilId AND status = 2";
+          $resultKommentarAdmin =  mysqli_query($conn, $sqlkommentarAdmin);
+          $getKommentarAdmin = mysqli_fetch_array($resultKommentarAdmin);
+          // UDEN LOG IND
+          foreach($resultKommentar as $row){
+              echo"<div class='kommentar__info'>";
+                  echo "<h4 class='kommentar__name'>".$row['navn']."</h4>";
+                  echo "<p class='kommentar__date common'>".$row['dato']."</p>";
+                  echo "<p class='kommentar__text common'>".$row['text']."</p>";
+                  echo "<hr>";
+              echo"</div>";
+          }
+
+          // ADMIN OG FORHANDLER
+          if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3){
+            foreach($resultKommentarAdmin as $row){
+              echo"<div class='kommentar__info'>";
+                  echo "<h4 class='kommentar__name'>*".$row['navn']."</h4>";
+                  echo "<p class='kommentar__date common'>".$row['dato']."</p>";
+                  echo "<p class='kommentar__text common'>".$row['text']."</p>";
+                  echo "<form method='POST' action='bilinfo.php'><button type='submit' name='btn-godkend'>Godkend</button></form>";
+                  echo "<hr>";
+              echo"</div>";
             }
+
+            if(isset($_POST['btn-godkend'])){
+              if($resultKommentarAdmin){
+                
+              }
+              $kommentarIdAdmin = $getKommentarAdmin['id'];
+              $sqlGodkedKommentar = "UPDATE kommentar SET status = 1 WHERE id = $kommentarIdAdmin";
+              $resultGodkendtKommentar = mysqli_query($conn, $sqlGodkedKommentar);
+
+              if($resultGodkendtKommentar){
+                echo "<script>blurt('Kommentaren er godkendt.')</script>";
+                // echo "<script>alert('Kommentaren er godkendt.')</script>";
+              }
+            }
+          }
         
         ?>
 
@@ -121,9 +140,9 @@ include_once "bilbixenDatabase.php";
     <input type="text"  name="username" class="kommentar__input " placeholder="Navn" required/>
     <input type="email"  name="userEmail" class="kommentar__input "  placeholder="E-mail" required />
 
-    <textarea type="text" rows="7" cols="63.2"  name="textKommentar" class="kommentar__text text-common" placeholder="Kommentar" required></textarea>
+    <textarea type="text"   name="textKommentar" class="kommentar__text text-common" placeholder="Kommentar" required></textarea>
 
-
+  <!-- rows="7" cols="63.2" -->
     <button class="btn btn-primary btn-komm" type="submit" name='sendKommentar'>Send din kommentar</button>
   </form>
   

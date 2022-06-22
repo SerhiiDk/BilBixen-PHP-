@@ -1,6 +1,7 @@
 <?php
 
 include_once "bilbixenDatabase.php";
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -19,33 +20,12 @@ include_once "bilbixenDatabase.php";
     <title>Bilbixen</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="index.php">Logo</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-      
-          <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav me-auto">
-              <li class="nav-item">
-                <a class="nav-link active" href="index.php">Hjem
-                  <span class="visually-hidden">(current)</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="katalog.php">Katalog</a>
-              </li>
-            </ul>
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                  <a class="nav-link active" href="login.php">Log ind</a>  
-                </li>
-            </ul>
-          </div>
-        </div>
-</nav>
+    
+<?php 
+include_once "navbar.php";
+?>
 <?php
+
 $sqlPersonbil = "SELECT * FROM biler WHERE type=1 ORDER BY RAND() LIMIT 1";
 $sqlVrag =  "SELECT * FROM biler WHERE type=3 ORDER BY RAND() LIMIT 1";
 $sqlVarebil = "SELECT * FROM biler WHERE type=2 ORDER BY RAND() LIMIT 1";
@@ -71,11 +51,18 @@ $sqlAntalKommentarPersonbil = "SELECT COUNT(*) AS antal FROM kommentar WHERE bil
 $resultAKPersonbil= mysqli_query($conn, $sqlAntalKommentarPersonbil);
 $aKPersonbil = mysqli_fetch_array($resultAKPersonbil);
 
+$sqlAntalKommentarPersonbilAdmin = "SELECT COUNT(*) AS antal FROM kommentar WHERE bilid = $personbilId AND status=2";
+$resultAKPersonbilAdmin= mysqli_query($conn, $sqlAntalKommentarPersonbilAdmin);
+$aKPersonbilAdmin = mysqli_fetch_array($resultAKPersonbilAdmin);
 
 // vrag
 $sqlAntalKommentarVrag = "SELECT COUNT(*) AS antal FROM kommentar WHERE bilid = $vragId AND status=1";
 $resultAKVrag= mysqli_query($conn, $sqlAntalKommentarVrag);
 $aKVrag = mysqli_fetch_array($resultAKVrag);
+
+$sqlAntalKommentarVragAdmin = "SELECT COUNT(*) AS antal FROM kommentar WHERE bilid = $vragId AND status=2";
+$resultAKVragAdmin= mysqli_query($conn, $sqlAntalKommentarVragAdmin);
+$aKVragAdmin = mysqli_fetch_array($resultAKVragAdmin);
 
 
 // varebil
@@ -83,7 +70,9 @@ $sqlAntalKommentarVarebil = "SELECT COUNT(*) AS antal FROM kommentar WHERE bilid
 $resultAKVarebil = mysqli_query($conn, $sqlAntalKommentarVarebil);
 $aKVarebil = mysqli_fetch_array($resultAKVarebil);
 
-
+$sqlAntalKommentarVarebilAdmin = "SELECT COUNT(*) AS antal FROM kommentar WHERE bilid = $varebilId AND status=2";
+$resultAKVarebilAdmin= mysqli_query($conn, $sqlAntalKommentarVarebilAdmin);
+$aKVarebilAdmin = mysqli_fetch_array($resultAKVarebilAdmin);
 
 
 ?>
@@ -107,8 +96,41 @@ $aKVarebil = mysqli_fetch_array($resultAKVarebil);
                 <div class="front-card" >
                     <input class='logIn__input name' name='bilId' value="<?php echo $personbilInfo['id'] ?>" >
                     <img src="<?php echo $personbilInfo['billede'] ?>" class="car__front-billede" alt="...">
-                    <div class='car__front-kommentar'><?php echo $aKPersonbil['antal']?></div>
-                    <p class='car__front-price'><?php echo $personbilInfo['pris'] ?> DKK</p>
+                    <div class='car__front-kommentar'>
+                      
+                      <?php
+                       if(!isset($_SESSION['loggedIn'])){
+                         echo $aKPersonbil['antal'];
+                      }
+                      else {
+                        if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3 ){
+                          echo $aKPersonbil['antal'];
+                          if( $aKPersonbilAdmin['antal'] >0){
+                            echo "(".$aKPersonbilAdmin['antal'].")";
+                          }
+                        }
+                        else {
+                          // til hjemmebruger
+                        }
+                      }
+                       ?>
+                    </div>
+                    <p class='car__front-price'>
+                      <?php
+                        if(!isset($_SESSION['loggedIn'])){
+                          echo number_format($personbilInfo['pris'],0,"",".");
+                        }
+                        else {
+                          if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3 ){
+                            echo number_format(($personbilInfo['pris'] * 0.8),0,"",".");
+                          }
+                          else {
+                            // til hjemmebruger
+                          }
+                        }
+                      ?>
+                      DKK
+                    </p>
                     <div class="card-body">
                     <h5 class="card__front-title">
                         <?php
@@ -144,8 +166,40 @@ $aKVarebil = mysqli_fetch_array($resultAKVarebil);
                 <div class="front-card" >
                     <input class='logIn__input name' name='bilId' value="<?php echo $vragInfo['id'] ?>">
                     <img src="<?php echo $vragInfo['billede'] ?>" class="car__front-billede" alt="...">
-                    <div class='car__front-kommentar'><?php echo $aKVrag['antal']?></div>
-                    <p class='car__front-price'><?php echo $vragInfo['pris'] ?> DKK</p>
+                    <div class='car__front-kommentar'>
+                      <?php
+                        if(!isset($_SESSION['loggedIn'])){
+                          echo $aKVrag['antal'];
+                        }
+                        else {
+                          if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3 ){
+                            echo $aKVrag['antal'];
+                            if( $aKVragAdmin['antal'] >0){
+                              echo "(".$aKVragAdmin['antal'].")";
+                            }
+                          }
+                          else {
+                            // til hjemmebruger
+                          }
+                        }
+                       ?>
+                    </div>
+                    <p class='car__front-price'>
+                    <?php
+                        if(!isset($_SESSION['loggedIn'])){
+                          echo number_format($vragInfo['pris'],0,"",".");
+                        }
+                        else {
+                          if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3 ){
+                            echo number_format(($vragInfo['pris'] * 0.8),0,"",".");
+                          }
+                          else {
+                            // til hjemmebruger
+                          }
+                        }
+                      ?> 
+                      DKK
+                    </p>
                     <div class="card-body">
                     <h5 class="card__front-title">
                         <?php
@@ -180,8 +234,40 @@ $aKVarebil = mysqli_fetch_array($resultAKVarebil);
             <div class="front-card">
                 <input class='logIn__input name' name='bilId' value="<?php echo $varebilInfo['id'] ?>">
                     <img src="<?php echo $varebilInfo['billede'] ?>" class="car__front-billede" alt="...">
-                    <div class='car__front-kommentar'><?php echo $aKVarebil['antal']?></div>
-                    <p class='car__front-price'><?php echo $varebilInfo['pris'] ?> DKK</p>
+                    <div class='car__front-kommentar'>
+                      <?php
+                        if(!isset($_SESSION['loggedIn'])){
+                        echo $aKVarebil['antal'];
+                        }
+                        else {
+                          if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3 ){
+                            echo $aKVarebil['antal'];
+                            if( $aKVarebilAdmin['antal'] >0){
+                              echo "(".$aKVarebilAdmin['antal'].")";
+                            }
+                          }
+                          else {
+                            // til hjemmebruger
+                          }
+                        }
+                       ?>
+                    </div>
+                    <p class='car__front-price'>
+                    <?php
+                        if(!isset($_SESSION['loggedIn'])){
+                            echo number_format($varebilInfo['pris'],0,"",".");
+                        }
+                        else {
+                          if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3 ){
+                            echo number_format(($varebilInfo['pris'] * 0.8),0,"",".");
+                          }
+                          else {
+                            // til hjemmebruger
+                          }
+                        }
+                      ?>
+                      DKK
+                    </p>
                     <div class="card-body">
                     <h5 class="card__front-title"><?php
                      if(strlen($varebilInfo['model']) <= 27){

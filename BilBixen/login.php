@@ -1,3 +1,8 @@
+<?php
+include_once "bilbixenDatabase.php";
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,37 +21,64 @@
     <title>Document</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="index.php">Logo</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-      
-          <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav me-auto">
-              <li class="nav-item">
-                <a class="nav-link active" href="index.php">Hjem
-                  <span class="visually-hidden">(current)</span>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="katalog.php">Katalog</a>
-              </li>
-            </ul>
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                  <a class="nav-link active" href="login.php">Log ind</a>  
-                </li>
-            </ul>
-          </div>
-        </div>
-</nav>
-    <form class="log__form" action="..." method="POST">
+<?php 
+  include_once "navbar.php";
+
+?>
+
+
+
+<?php
+if(isset($_SESSION['loggedIn'])){
+  echo "Du er logget ind";
+}
+else{
+?>
+    <form class="log__form" action="login.php" method="POST">
         <h3 class="log__heading">Log ind i Bilbixen</h3>
-        <input class="log__input" type="text" name="brugernavn" placeholder="Brugernavn">
-        <input class="log__input" type="password" name="password" placeholder="Password">
-        <button class="btn btn-primary log__btn" type="submit">Log ind</button>
+        <input class="log__input" type="text" name="brugernavn" placeholder="Brugernavn" required>
+        <input class="log__input" type="password" name="password" placeholder="Password" required>
+        <button class="btn btn-primary log__btn" name='log-btn' type="submit">Log ind</button>
     </form>
-</body>
+    </body>
+<?php
+  if(isset($_POST['log-btn'])){
+
+    // ADMIN
+    $sqlTabelAdmin = "administration";
+    $adminBrugernavn = $_POST['brugernavn'];
+    $adminPassword = $_POST['password'];
+    $sqlLoginAdmin = "SELECT * FROM $sqlTabelAdmin WHERE brugernavn = '$adminBrugernavn' AND password = '$adminPassword'";
+    $resultAdmin = mysqli_query($conn, $sqlLoginAdmin);
+
+
+    // FORHANDLER
+    $sqlTabelForhandler = "forhandler";
+    $forhandlerBrugernavn = $_POST['brugernavn'];
+    $forhandlerPaswword = $_POST['password'];
+    $sqlLoginForhandler = "SELECT * FROM $sqlTabelForhandler WHERE brugernavn = '$forhandlerBrugernavn' AND password = '$forhandlerPaswword'";
+    $resultForhandler = mysqli_query($conn, $sqlLoginForhandler);
+
+
+    if(mysqli_num_rows($resultAdmin) == 1){
+      $_SESSION['loggedIn'] = TRUE;
+      $_SESSION['rettigheder'] = '3';
+      header('location: index.php');
+    }
+
+    else if (mysqli_num_rows($resultForhandler) == 1){
+      $_SESSION['loggedIn'] = TRUE;
+      $_SESSION['rettigheder'] = '2';
+      header('location: index.php');
+    }
+    else
+    {
+      echo "<script>alert('Forkert')</script>";
+      header('Refresh: 1; location: login.php');
+    }
+  }
+}
+
+
+?>
 </html>
