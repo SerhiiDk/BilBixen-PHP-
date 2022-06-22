@@ -105,20 +105,24 @@ session_start();
           // ADMIN OG FORHANDLER
           if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3){
             foreach($resultKommentarAdmin as $row){
-              echo"<div class='kommentar__info'>";
+              echo"<form class='kommentar__info' method='POST' action='bilInfo.php'>";
+                  echo "<input class='logIn__input name' name='kommentarId' value=".$row['id']." />";
                   echo "<h4 class='kommentar__name'>*".$row['navn']."</h4>";
                   echo "<p class='kommentar__date common'>".$row['dato']."</p>";
                   echo "<p class='kommentar__text common'>".$row['text']."</p>";
-                  echo "<form method='POST' action='bilinfo.php'><button type='submit' name='btn-godkend'>Godkend</button></form>";
+                  echo "<button type='submit' name='btn-godkend'>Godkend</button>";
+                  
                   echo "<hr>";
-              echo"</div>";
+              echo"</form>";
             }
 
             if(isset($_POST['btn-godkend'])){
+              $getKommentarIdFromBtn = $_POST['kommentarId'];
               if($resultKommentarAdmin){
                 
               }
-              $kommentarIdAdmin = $getKommentarAdmin['id'];
+              $kommentarIdAdmin = $getKommentarIdFromBtn;
+              // echo $kommentarIdAdmin;
               $sqlGodkedKommentar = "UPDATE kommentar SET status = 1 WHERE id = $kommentarIdAdmin";
               $resultGodkendtKommentar = mysqli_query($conn, $sqlGodkedKommentar);
 
