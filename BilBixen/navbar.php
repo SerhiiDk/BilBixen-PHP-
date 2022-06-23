@@ -15,6 +15,37 @@
               <li class="nav-item">
                 <a class="nav-link" href="katalog.php">Katalog</a>
               </li>
+
+              <?php
+              if(isset($_SESSION['loggedIn']))
+              {
+                if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3 ){
+              ?>
+
+              <li class="nav-item">
+                <a class="nav-link" href="bilOversigt.php">Bil-oversigt</a>
+              </li>
+
+              <?php
+                }
+              }
+              ?>
+
+              <?php
+              if(isset($_SESSION['loggedIn']))
+              {
+                if($_SESSION['rettigheder'] == 3 ){
+              ?>
+
+              <li class="nav-item">
+                <a class="nav-link" href="administration.php">Administration</a>
+              </li>
+              
+              <?php
+                }
+              }
+              ?>
+
             </ul>
             <ul class="navbar-nav">
                 <li class="nav-item">

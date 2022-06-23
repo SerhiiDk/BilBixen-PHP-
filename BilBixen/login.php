@@ -1,6 +1,7 @@
 <?php
 include_once "bilbixenDatabase.php";
 session_start();
+unset ($_SESSION['bilID']);
 ?>
 
 <!DOCTYPE html>

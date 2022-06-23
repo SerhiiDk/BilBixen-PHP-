@@ -24,8 +24,13 @@ session_start();
     <section class='bil__container'>
         <h2 class="bilInfo__heading heading">Detaljer</h2>
         <?php
-            //$getBilId = $_POST['bilId'];
-            $getBilId = 1;
+
+            if(!isset($_SESSION['bilID']))
+            {
+              $_SESSION['bilID'] = $_POST['bilId'];
+            }
+            $getBilId = $_SESSION['bilID'];
+
             $dbBilTable = "biler";
             $dbKommentar = "kommentar";
             
@@ -94,48 +99,88 @@ session_start();
           $getKommentarAdmin = mysqli_fetch_array($resultKommentarAdmin);
           // UDEN LOG IND
           foreach($resultKommentar as $row){
-              echo"<div class='kommentar__info'>";
+                  echo"<form class='kommentar__info' method='POST' action='bilInfo.php'>";
                   echo "<h4 class='kommentar__name'>".$row['navn']."</h4>";
                   echo "<p class='kommentar__date common'>".$row['dato']."</p>";
                   echo "<p class='kommentar__text common'>".$row['text']."</p>";
-                  echo "<hr>";
-              echo"</div>";
+
+                  if(isset($_SESSION['loggedIn'])){
+                    if($_SESSION['rettigheder'] == 3){
+                      echo "<input class='logIn__input name' name='kommentarIdSlet' value=".$row['id']." />";
+                      echo "<button type='submit' name='btn-slet'>Slet</button>";
+
+                      if(isset($_POST['btn-slet'])){
+                        $getKommentarIdFromSletBtn = $_POST['kommentarIdSlet'];
+
+                        $sqlSletKommentar = "DELETE FROM `kommentar` WHERE id = $getKommentarIdFromSletBtn";
+        
+                        if(mysqli_query($conn, $sqlSletKommentar)){
+                          echo "<script>blurt('Kommentaren er slettet.')</script>";
+                        }
+                      }
+                    }
+                  }
+              echo "<hr>";
+              echo"</form>";
           }
 
           // ADMIN OG FORHANDLER
-          if(!isset($_SESSION['loggedIn'])){
-          }
-          else{
-          if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3){
-            foreach($resultKommentarAdmin as $row){
-              echo"<form class='kommentar__info' method='POST' action='bilInfo.php'>";
-                  echo "<input class='logIn__input name' name='kommentarId' value=".$row['id']." />";
-                  echo "<h4 class='kommentar__name'>*".$row['navn']."</h4>";
-                  echo "<p class='kommentar__date common'>".$row['dato']."</p>";
-                  echo "<p class='kommentar__text common'>".$row['text']."</p>";
-                  echo "<button type='submit' name='btn-godkend'>Godkend</button>";
-                  
-                  echo "<hr>";
-              echo"</form>";
-            }
+          if(isset($_SESSION['loggedIn'])){
+            if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3){
+              foreach($resultKommentarAdmin as $row){
+                echo"<form class='kommentar__info' method='POST' action='bilInfo.php'>";
+                    echo "<input class='logIn__input name' name='kommentarId' value=".$row['id']." />";
+                    echo "<h4 class='kommentar__name'>*".$row['navn']."</h4>";
+                    echo "<p class='kommentar__date common'>".$row['dato']."</p>";
+                    echo "<p class='kommentar__text common'>".$row['text']."</p>";
+                    echo "<button type='submit' name='btn-godkend'>Godkend</button>";
+                    echo "<button type='submit' name='btn-afvis'>Afvis</button>";
 
-            if(isset($_POST['btn-godkend'])){
-              $getKommentarIdFromBtn = $_POST['kommentarId'];
-              if($resultKommentarAdmin){
-                
-              }
-              $kommentarIdAdmin = $getKommentarIdFromBtn;
-              // echo $kommentarIdAdmin;
-              $sqlGodkedKommentar = "UPDATE kommentar SET status = 1 WHERE id = $kommentarIdAdmin";
-              $resultGodkendtKommentar = mysqli_query($conn, $sqlGodkedKommentar);
+                    if(isset($_SESSION['loggedIn'])){
+                      if($_SESSION['rettigheder'] == 3){
+                        echo "<input class='logIn__input name' name='kommentarIdSlet' value=".$row['id']." />";
+                        echo "<button type='submit' name='btn-slet'>Slet</button>";
 
-              if($resultGodkendtKommentar){
-                echo "<script>blurt('Kommentaren er godkendt.')</script>";
-                // echo "<script>alert('Kommentaren er godkendt.')</script>";
+                        if(isset($_POST['btn-slet'])){
+                          $getKommentarIdFromSletBtn = $_POST['kommentarIdSlet'];
+
+                          $sqlSletKommentar = "DELETE FROM `kommentar` WHERE id = $getKommentarIdFromSletBtn";
+          
+                          if(mysqli_query($conn, $sqlSletKommentar)){
+                            echo "<script>blurt('Kommentaren er slettet.')</script>";
+                          }
+                        }
+                      }
+                    }
+                    echo "<hr>";
+                echo"</form>";
+              }
+
+              if(isset($_POST['btn-godkend'])){
+                $getKommentarIdFromBtn = $_POST['kommentarId'];
+
+                $sqlGodkedKommentar = "UPDATE kommentar SET status = 1 WHERE id = $getKommentarIdFromBtn";
+                $resultGodkendtKommentar = mysqli_query($conn, $sqlGodkedKommentar);
+
+                if($resultGodkendtKommentar){
+                  echo "<script>blurt('Kommentaren er godkendt.')</script>";
+                  // echo "<script>alert('Kommentaren er godkendt.')</script>";
+                }
+              }
+
+              if(isset($_POST['btn-afvis'])){
+                $getKommentarIdFromBtn = $_POST['kommentarId'];
+
+                $sqlAfvisKommentar = "UPDATE kommentar SET status = 3 WHERE id = $getKommentarIdFromBtn";
+                $resultAfvistKommentar = mysqli_query($conn, $sqlAfvisKommentar);
+
+                if($resultAfvistKommentar){
+                  echo "<script>blurt('Kommentaren er afvist.')</script>";
+                  // echo "<script>alert('Kommentaren er godkendt.')</script>";
+                }
               }
             }
           }
-        }
 
         
         ?>
