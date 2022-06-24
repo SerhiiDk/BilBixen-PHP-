@@ -107,7 +107,7 @@ session_start();
                   if(isset($_SESSION['loggedIn'])){
                     if($_SESSION['rettigheder'] == 3){
                       echo "<input class='logIn__input name' name='kommentarIdSlet' value=".$row['id']." />";
-                      echo "<button type='submit' name='btn-slet'>Slet</button>";
+                      echo "<button type='submit' name='btn-slet' class='slet__kommentar commonBtn__komment'>Slet</button>";
 
                       if(isset($_POST['btn-slet'])){
                         $getKommentarIdFromSletBtn = $_POST['kommentarIdSlet'];
@@ -130,16 +130,20 @@ session_start();
               foreach($resultKommentarAdmin as $row){
                 echo"<form class='kommentar__info' method='POST' action='bilInfo.php'>";
                     echo "<input class='logIn__input name' name='kommentarId' value=".$row['id']." />";
+                    
+                    echo "<div class='kommentar__body'>";
                     echo "<h4 class='kommentar__name'>*".$row['navn']."</h4>";
                     echo "<p class='kommentar__date common'>".$row['dato']."</p>";
-                    echo "<p class='kommentar__text common'>".$row['text']."</p>";
-                    echo "<button type='submit' name='btn-godkend'>Godkend</button>";
-                    echo "<button type='submit' name='btn-afvis'>Afvis</button>";
-
+                    echo "<p class='kommentar__text common'>".$row['text']."<button type='submit' name='btn-godkend' class='godkend__kommentar commonBtn__komment'>Godkend</button><button type='submit' name='btn-afvis' class='afvist__kommentar commonBtn__komment'>Afvis</button></p>";
+                    // echo "<div class='buttons__kommentar'>";
+                    // echo "<button type='submit' name='btn-godkend' class='godkend__kommentar commonBtn__komment'>Godkend</button>";
+                    // echo "<button type='submit' name='btn-afvis' class='afvist__kommentar commonBtn__komment'>Afvis</button>";
+                    // echo "</div>";
+                    echo "</div>";
                     if(isset($_SESSION['loggedIn'])){
                       if($_SESSION['rettigheder'] == 3){
                         echo "<input class='logIn__input name' name='kommentarIdSlet' value=".$row['id']." />";
-                        echo "<button type='submit' name='btn-slet'>Slet</button>";
+                        echo "<button type='submit' name='btn-slet'   class='slet__kommentar commonBtn__komment'>Slet</button>";
 
                         if(isset($_POST['btn-slet'])){
                           $getKommentarIdFromSletBtn = $_POST['kommentarIdSlet'];

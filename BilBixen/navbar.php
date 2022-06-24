@@ -56,6 +56,7 @@
                       echo "</form>";
                     }
                     else{
+                      echo "<li class='nav-item brugernavn'>".$_SESSION['brugernavn']."</li>";
                       echo "<form action='.' method='POST'>";
                       echo "<button class='nav-link active' type='submit' name='log_hjem' href='.'>Log ud</button>"; 
                       echo "</form>";

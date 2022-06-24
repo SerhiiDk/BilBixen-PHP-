@@ -37,87 +37,8 @@ if(isset($_SESSION['loggedIn']))
   if($_SESSION['rettigheder'] == 2 || $_SESSION['rettigheder'] == 3)
   {
 
-    echo "<h4> Opret ny bil </h4>";
 
-    ?>
-    <form class="bilOprettelse__form" method='POST' action='bilOversigt.php'>
-    <input type="text"  name="bilModel" class="bilOprettelse__input " placeholder="Model" required/>
-    <input type="text"  name="bilPris" class="bilOprettelse__input "  placeholder="Pris" required />
-    <input type="text"  name="bilKM" class="bilOprettelse__input "  placeholder="Kørt kilometer" required />
-    <!-- Skal ændres til dato værdi -->
-    <input type="text"  name="bilRegistrering" class="bilOprettelse__input "  placeholder="først registreret" required />
-    <!-- Skal ændres til valgmulighedder 1(personbil) 2(varebil) 3(vrag) -->
-    <input type="text"  name="bilType" class="bilOprettelse__input "  placeholder="type" required />
-    <!-- Skal ændres til valgmulighedder for alle forhandlere -->
-    <input type="text"  name="bilForhandler" class="bilOprettelse__input "  placeholder="forhandler" required />
-    <!-- Skal ændres til valgmulighedder 1(tilgængelig) 2(Solgt)) 3(Til udlejning) -->
-    <input type="text"  name="bilStatus" class="bilOprettelse__input "  placeholder="Status" required />
-    <input type="text"  name="bilBillede" class="bilOprettelse__input "  placeholder="Billede" required />
-
-    <!-- rows="7" cols="63.2" -->
-    <button class="btn btn-primary btn-komm" type="submit" name='opretBil'>Opret</button>
-    </form>
-    </body>
-    </html>
-
-    <?php
-    if (isset($_POST['opretBil'])){  
-
-        $dbForhandlerTabel = "biler";
-
-        $bilModel = $_POST['bilModel'];
-        $bilPris = $_POST['bilPris'];
-        $bilKørtKM = $_POST['bilKM'];
-        $bilRegistrering = $_POST['bilRegistrering'];
-        $bilType = $_POST['bilType'];
-        $bilForhandler = $_POST['bilForhandler'];
-        $bilStatus = $_POST['bilStatus'];
-        $bilBillede = $_POST['bilBillede'];
-
-        $sqlOpretBil = "INSERT INTO `biler`(`id`, `model`, `pris`, `kørt kilometer`, `først registreret`, `type`, `forhandler`, `status`, `billede`) VALUES (NULL,'$bilModel','$bilPris','$bilKørtKM','$bilRegistrering','$bilType','$bilForhandler','$bilStatus','$bilBillede')";
-
-        if(mysqli_query($conn, $sqlOpretBil)){
-
-        echo "<script>alert('Bilen er oprettet.')</script>";
-        }
-        else{
-        echo "<script>alert('Prøv igen senere.')</script>";
-        }
-    }  
-    
-
-
-
-
-
-
-    echo "<br><hr>";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    echo "<br>";
 
 
     $dbBilerTabel = "biler";
@@ -131,7 +52,7 @@ if(isset($_SESSION['loggedIn']))
         
         echo "<form class='card card-block' style='width: 18rem;' method='POST' action='bilOversigt.php'>";
 
-        echo "<input class='logIn__input name' name='bilId' value=".$row['id']." >";
+        echo "<input class='logIn__input name' name='bilId' value=".$row['id']." />";
 
         echo "<img src='" .$row['billede']. "' class='img_style' alt='...'>";
 
@@ -144,26 +65,24 @@ if(isset($_SESSION['loggedIn']))
 
         echo "<p class='card-text'>"."ID: ".$row['id']."</p>";
 
-        echo "<button  type='submit' class='btn btn-primary'>Se alle informationer</button>";
+        echo "<button  type='submit' class='btn btn-primary' name='altInfo'>Se alle informationer</button>";
 
         echo "<br>";
 
 
-        echo "<input class='logIn__input name' name='bildIdSolgt' value=".$row['id']." />";
-        echo "<button type='submit' name='btn-solgt'>Solgt</button>";
+        // echo "<input class='logIn__input name' name='bildIdSolgt' value=".$row['id']." />";
+        echo "<button type='submit' class='btnOversigt__solgt oversigt-btn' name='btn-solgt'>Solgt</button>";
 
         echo "<br>";
 
-        echo "<input class='logIn__input name' name='bilIdSlet' value=".$row['id']." />";
-        echo "<button type='submit' name='btn-slet'>Slet</button>";
+        // echo "<input class='logIn__input name' name='bilIdSlet' value=".$row['id']." />";
+        echo "<button type='submit' name='btn-slet' class='btnOversigt__slet oversigt-btn' >Slet</button>";
+
+
+       
         
-
-
-
-
-
         if(isset($_POST['btn-solgt'])){
-          $getBilIdFromSolgtBtn = $_POST['bildIdSolgt'];
+          $getBilIdFromSolgtBtn = $_POST['bilId'];
 
           $sqlSolgtBil = "UPDATE biler SET status = 2 WHERE id = $getBilIdFromSolgtBtn";
 
@@ -173,7 +92,7 @@ if(isset($_SESSION['loggedIn']))
         }
 
         if(isset($_POST['btn-slet'])){
-          $getBilIdFromSletBtn = $_POST['bilIdSlet'];
+          $getBilIdFromSletBtn = $_POST['bilId'];
 
           $sqlSletBil = "DELETE FROM `biler` WHERE id = $getBilIdFromSletBtn";
 
@@ -182,15 +101,14 @@ if(isset($_SESSION['loggedIn']))
           }
         }
 
-
-
-
         echo "</form>";
-
-
-
-
-
+      }
+      if(isset($_POST['altInfo'])){
+        // echo "<script>alert('Full INFO')</script>";
+        $_SESSION['bilID'] = $_POST['bilId'];
+        // $$msg= "index.php";
+        echo("<script>location.href = 'bilInfo.php';</script>");
+        header('location: bilInfo.php');
       }
       echo "</div>";
     }
@@ -209,6 +127,69 @@ else
   echo "Du skal logge ind for at kunne se denne side";
 }
 
+echo "<br>";
+
+echo "<h4 class='bilOprettelse__heading'> Opret ny bil </h4>";
+
+?>
+
+<div class='bilOprettelse__form__block'>
+<form class="bilOprettelse__form" method='POST' action='bilOversigt.php' class="bilOprettelse__form">
+<input type="text"  name="bilModel" class="bilOprettelse__input" placeholder="Model" required/>
+<input type="text"  name="bilPris" class="bilOprettelse__input"  placeholder="Pris" required />
+<input type="text"  name="bilKM" class="bilOprettelse__input"  placeholder="Kørt kilometer" required />
+<input type="date"  name="bilRegistrering" class="bilOprettelse__input"  placeholder="først registreret" required />
+<!-- Skal ændres til valgmulighedder 1(personbil) 2(varebil) 3(vrag) select-option --> 
+<select name="bilType" class="bilOprettelse__select" required >
+  <option value="" disabled selected>Bil Type</option>
+  <option value="1">Personbil</option>
+  <option value="3">Vrag</option>
+  <option value="2">Varebil</option>
+</select>
+<!-- <input type="text"  name="bilType" class="bilOprettelse__input"  placeholder="type" required /> -->
+<!-- Skal ændres til valgmulighedder for alle forhandlere  -->
+<input type="text"  name="bilForhandler" class="bilOprettelse__input "  placeholder="forhandler" required />
+<!-- Skal ændres til valgmulighedder 1(tilgængelig) 2(Solgt)) 3(Til udlejning) select-option -->
+
+<select name="bilStatus" class="bilOprettelse__select" required >
+  <option value="" disabled selected>Tilgængelighed</option>
+  <option value="1">Tilgængelig</option>
+  <option value="2">Solgt</option>
+</select>
+<!-- <input type="text"  name="bilStatus" class="bilOprettelse__input"  placeholder="Status" required /> -->
+
+<input type="text"  name="bilBillede" class="bilOprettelse__input"  placeholder="Billede" required />
+
+<!-- rows="7" cols="63.2" -->
+<button class="btn btn-primary btn-komm" type="submit" name='opretBil'>Opret</button>
+</form>
+</div>
+</body>
+</html>
+
+<?php
+if (isset($_POST['opretBil'])){  
+
+    $dbForhandlerTabel = "biler";
+
+    $bilModel = $_POST['bilModel'];
+    $bilPris = $_POST['bilPris'];
+    $bilKørtKM = $_POST['bilKM'];
+    $bilRegistrering = $_POST['bilRegistrering'];
+    $bilType = $_POST['bilType'];
+    $bilForhandler = $_POST['bilForhandler'];
+    $bilStatus = $_POST['bilStatus'];
+    $bilBillede = $_POST['bilBillede'];
+
+    $sqlOpretBil = "INSERT INTO `biler`(`id`, `model`, `pris`, `kørt kilometer`, `først registreret`, `type`, `forhandler`, `status`, `billede`) VALUES (NULL,'$bilModel','$bilPris','$bilKørtKM','$bilRegistrering','$bilType','$bilForhandler','$bilStatus','$bilBillede')";
+
+    if(mysqli_query($conn, $sqlOpretBil)){
+    echo "<script>alert('Bilen er oprettet.')</script>";
+    }
+    else{
+    echo "<script>alert('Prøv igen senere.')</script>";
+    }
+}  
 
 
 

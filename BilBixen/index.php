@@ -96,7 +96,37 @@ $aKVarebilAdmin = mysqli_fetch_array($resultAKVarebilAdmin);
             <form class="cars__pesonbil common__car" method ='POST' action="bilInfo.php">
                 <div class="front-card" >
                     <input class='logIn__input name' name='bilId' value="<?php echo $personbilInfo['id'] ?>" >
-                    <img src="<?php echo $personbilInfo['billede'] ?>" class="car__front-billede" alt="...">
+
+                    <?php
+                    
+                    if($personbilInfo['status'] == 2)
+                    {
+                      
+                    ?>
+                    <div class='ribbon'>SOLGT</div>
+                    <img src="<?php echo $personbilInfo['billede'];?>" class="car__front-billede-solgt" alt="...">
+
+
+
+                    <?php
+                    }
+                    else {
+                    ?>
+
+
+                    <img src="<?php 
+
+
+
+                      echo $personbilInfo['billede'];
+
+                      // echo "<div class='ribbon'></div>";
+
+                    
+                      ?>" class="car__front-billede" alt="...">
+
+                      <?php } ?>
+
                     <div class='car__front-kommentar'>
                       
                       <?php

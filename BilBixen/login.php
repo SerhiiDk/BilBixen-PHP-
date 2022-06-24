@@ -64,12 +64,14 @@ else{
     if(mysqli_num_rows($resultAdmin) == 1){
       $_SESSION['loggedIn'] = TRUE;
       $_SESSION['rettigheder'] = '3';
+      $_SESSION['brugernavn'] = $adminBrugernavn;
       header('location: index.php');
     }
 
     else if (mysqli_num_rows($resultForhandler) == 1){
       $_SESSION['loggedIn'] = TRUE;
       $_SESSION['rettigheder'] = '2';
+      $_SESSION['brugernavn'] = $forhandlerBrugernavn;
       header('location: index.php');
     }
     else
