@@ -24,11 +24,6 @@ unset ($_SESSION['bilID']);
   include_once "navbar.php";
 ?>
 
-
-
-
-
-
 <?php
 
 
@@ -71,9 +66,17 @@ if(isset($_SESSION['loggedIn']))
 
 
         // echo "<input class='logIn__input name' name='bildIdSolgt' value=".$row['id']." />";
-        echo "<button type='submit' class='btnOversigt__solgt oversigt-btn' name='btn-solgt'>Solgt</button>";
+        if($row['status']==2){
+          echo "<button class='btnOversigt_skjult' disabled name='btn-solgt'>Bilen er solgt</button>";
+          echo "<br>";
+        }
+        else {
+          echo "<button type='submit' class='btnOversigt__solgt oversigt-btn' name='btn-solgt'>Solgt</button>";
+          echo "<br>";
+        }
 
-        echo "<br>";
+
+
 
         // echo "<input class='logIn__input name' name='bilIdSlet' value=".$row['id']." />";
         echo "<button type='submit' name='btn-slet' class='btnOversigt__slet oversigt-btn' >Slet</button>";
@@ -140,7 +143,7 @@ echo "<h4 class='bilOprettelse__heading'> Opret ny bil </h4>";
 <input type="text"  name="bilKM" class="bilOprettelse__input"  placeholder="Kørt kilometer" required />
 <input type="date"  name="bilRegistrering" class="bilOprettelse__input"  placeholder="først registreret" required />
 <!-- Skal ændres til valgmulighedder 1(personbil) 2(varebil) 3(vrag) select-option --> 
-<select name="bilType" class="bilOprettelse__select" required >
+<select name="bilType" class="bilOprettelse__select selectOversigt" required >
   <option value="" disabled selected>Bil Type</option>
   <option value="1">Personbil</option>
   <option value="3">Vrag</option>
@@ -148,17 +151,40 @@ echo "<h4 class='bilOprettelse__heading'> Opret ny bil </h4>";
 </select>
 <!-- <input type="text"  name="bilType" class="bilOprettelse__input"  placeholder="type" required /> -->
 <!-- Skal ændres til valgmulighedder for alle forhandlere  -->
-<input type="text"  name="bilForhandler" class="bilOprettelse__input "  placeholder="forhandler" required />
+<!-- <input type="text"  name="bilForhandler" class="bilOprettelse__input"  placeholder="forhandler" required /> -->
+
+<?php
+
+$dbForhandlerTabel = "forhandler";
+$sqlAlleForhandler  = "SELECT * FROM $dbForhandlerTabel";
+$resultAlleForhandler = mysqli_query($conn, $sqlAlleForhandler);
+
+echo "<select name='bilForhandler' class='bilOprettelse__select selectOversigt' required >";
+echo " <option value='' disabled selected>Forhandler</option>";
+
+foreach($resultAlleForhandler as $row) {
+
+
+  echo "<option value=".$row['id'].">".$row['navn']."</option>";
+
+}
+echo "</select>";
+
+?>
+<!-- <select name="bilForhandler" class="bilOprettelse__select" required >
+  <option value="" disabled selected>Forhandler</option>
+  <option value="1">Tilgængelig</option>
+  <option value="2">Solgt</option>
+</select> -->
 <!-- Skal ændres til valgmulighedder 1(tilgængelig) 2(Solgt)) 3(Til udlejning) select-option -->
 
-<select name="bilStatus" class="bilOprettelse__select" required >
+<select name="bilStatus" class="bilOprettelse__select selectOversigt" required >
   <option value="" disabled selected>Tilgængelighed</option>
   <option value="1">Tilgængelig</option>
   <option value="2">Solgt</option>
 </select>
 <!-- <input type="text"  name="bilStatus" class="bilOprettelse__input"  placeholder="Status" required /> -->
-
-<input type="text"  name="bilBillede" class="bilOprettelse__input"  placeholder="Billede" required />
+<input type="file"  name="bilBillede" class="bilOprettelse__input"  placeholder="Billede" />
 
 <!-- rows="7" cols="63.2" -->
 <button class="btn btn-primary btn-komm" type="submit" name='opretBil'>Opret</button>

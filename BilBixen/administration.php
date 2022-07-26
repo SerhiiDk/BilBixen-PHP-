@@ -32,13 +32,12 @@ if(isset($_SESSION['loggedIn']))
   if($_SESSION['rettigheder'] == 3)
   {
 
-    echo "<h4> Opret ny forhandler </h4>";
-
     ?>
     <form class="administration__form" method='POST' action='administration.php'>
-    <input type="text"  name="navn" class="forhandler__input " placeholder="Navn" required/>
-    <input type="email"  name="forhandlerEmail" class="forhandler__input "  placeholder="E-mail" required />
-    <input type="text"  name="brugernavn" class="forhandler__input " placeholder="brugernavn" required/>
+    <h4>Opret ny forhandler </h4>
+    <input type="text"  name="navn" class="forhandler__input admin_input" placeholder="Navn" required/>
+    <input type="email"  name="forhandlerEmail" class="forhandler__input admin_input"  placeholder="E-mail" required />
+    <input type="text"  name="brugernavn" class="forhandler__input admin_input" placeholder="brugernavn" required/>
 
     <!-- rows="7" cols="63.2" -->
     <button class="btn btn-primary btn-komm" type="submit" name='opretForhandler'>Opret</button>
@@ -65,72 +64,26 @@ if(isset($_SESSION['loggedIn']))
         }
     }  
     
-
-
-
-
-
-
     echo "<br><hr>";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     $dbForhandlerTabel = "forhandler";
 
     $sqlAlleForhandlere  = "SELECT * FROM $dbForhandlerTabel";
     $resultAlleForhandlere = mysqli_query($conn, $sqlAlleForhandlere);
-
+    echo "<div class='forhandler-card'>";
     if ($resultAlleForhandlere) {
         foreach($resultAlleForhandlere as $row) {
-
             echo"<form class='administration__forhandlere' method='POST' action='administration.php'>";
 
             echo "<h5>".$row['navn']."</h5>";
-            echo "<p>".$row['email']."</p>";
-            echo "<p>".$row['brugernavn']."</p>";
+            echo "<p>Email:<br> ".$row['email']."</p>";
+            echo "<p>Brugernavn:<br>".$row['brugernavn']."</p>";
 
 
             echo "<input class='logIn__input name' name='forhandlerIdSlet' value=".$row['id']." />";
-            echo "<button type='submit' name='btn-slet'>Slet</button>";
+            echo "<button type='submit' class='btnOversigt__slet oversigt-btn' name='btn-slet'>Slet</button>";
 
-            echo "<br><br><br><br><br>";
+            echo "<br><br>";
 
 
             if(isset($_POST['btn-slet'])){
@@ -149,7 +102,7 @@ if(isset($_SESSION['loggedIn']))
             
         }
     }
-
+    echo "</div>";
 
 
   }

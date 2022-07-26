@@ -53,7 +53,22 @@ if ($resultPersonbiler = mysqli_query($conn, $sqlPersonbiler)) {
 
         echo "<input class='logIn__input name' name='bilId' value=".$row['id']." >";
 
-        echo "<img src='" .$row['billede']. "' class='img_style' alt='...'>";
+        // echo "<img src='" .$row['billede']. "' class='img_style' alt='...'>";
+
+                    
+        if($row['status'] == 2)
+        {
+          
+        echo "<div class='ribbon-katalog'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOLGT</div>";
+
+        echo "<img src=".$row['billede']." class='car__katalog-billede-solgt' alt='...'>";
+          
+        
+        }
+        else {
+
+        echo "<img src=".$row['billede']." class='car__katalog-billede' alt='...'>";
+        } 
 
         if(!isset($_SESSION['loggedIn'])){
           echo "<div class='kom'>".$rowAntalKommentarer['antal']."</div>";
@@ -137,7 +152,20 @@ if ($resultVrag = mysqli_query($conn, $sqlVrag)) {
 
       echo "<form class='card card-block' style='width: 18rem;'  method='POST' action='bilInfo.php'>";
       echo "<input class='logIn__input name' name='bilId' value=".$row['id']." >";
-        echo "<img src='" .$row['billede']. "' class='img_style' alt='...'>";
+        // echo "<img src='" .$row['billede']. "' class='img_style' alt='...'>";
+        if($row['status'] == 2)
+        {
+          
+        echo "<div class='ribbon-katalog'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOLGT</div>";
+
+        echo "<img src=".$row['billede']." class='car__katalog-billede-solgt' alt='...'>";
+          
+        
+        }
+        else {
+
+        echo "<img src=".$row['billede']." class='car__katalog-billede' alt='...'>";
+        } 
 
         if(!isset($_SESSION['loggedIn'])){
           echo "<div class='kom'>".$rowAntalKommentarer['antal']."</div>";
@@ -223,7 +251,20 @@ if ($resultVarebiler = mysqli_query($conn, $sqlVarebiler)) {
 
       echo "<form class='card card-block' style='width: 18rem;'  method='POST' action='bilInfo.php'>";
       echo "<input class='logIn__input name' name='bilId' value=".$row['id']." >";
-        echo "<img src='" .$row['billede']. "' class='img_style' alt='...'>";
+        // echo "<img src='" .$row['billede']. "' class='img_style' alt='...'>";
+        if($row['status'] == 2)
+        {
+          
+        echo "<div class='ribbon-katalog'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SOLGT</div>";
+
+        echo "<img src=".$row['billede']." class='car__katalog-billede-solgt' alt='...'>";
+          
+        
+        }
+        else {
+
+        echo "<img src=".$row['billede']." class='car__katalog-billede' alt='...'>";
+        } 
 
         if(!isset($_SESSION['loggedIn'])){
           echo "<div class='kom'>".$rowAntalKommentarer['antal']."</div>";

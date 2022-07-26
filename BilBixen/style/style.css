@@ -39,6 +39,19 @@ div.scrollmenu {
 
     
 }
+
+
+
+.car__katalog-billede-solgt{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 230px;
+  height: 159px;
+  margin-top: -15px;
+}
+
+
 .img_style{
     display: block;
     margin-left: auto;
@@ -47,6 +60,15 @@ div.scrollmenu {
     height: 159px;
     /* width: auto;
     height: auto; */
+}
+
+.car__katalog-billede {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 230px;
+  height: 159px;
+  margin-top: 9px;
 }
 .container11 {
   margin: auto 200px;
@@ -66,7 +88,7 @@ div.scrollmenu {
 }
 .car__price-info{
   position: absolute;
-  top: 146px;
+  top: 156px;
   left: 28px;
   background-color: #1E90FF;
   text-align: center;
@@ -85,7 +107,7 @@ div.scrollmenu {
   align-items: center;
   position: absolute;
   left: 229px;
-  top: 148px;
+  top: 158px;
   width: 30px;
   height: 25px;
   border-radius: 12px;
@@ -349,6 +371,14 @@ margin-left: 50px;
 
 /* OPERT BIL */
 
+
+.selectOversigt {
+  display: block;
+  width: 350px;
+  height: 50px;
+  margin-bottom: 5px;
+}
+
 .bilOprettelse__heading,
 .bilOprettelse__form__block {
   margin-top: auto;
@@ -402,7 +432,14 @@ color: white;
 .btnOversigt__solgt {
   background-color: orange;
 }
+.btnOversigt_skjult{
+  border: 1px solid transparent;
+  background-color: transparent;
+  color: black;
+  margin-top: 5px;
+  padding: 2px;
 
+}
 /* INDEX PAGE */
 
 .car__main-heading {
@@ -418,18 +455,6 @@ color: white;
   justify-content: center;
   align-items: center;
 }
-
-/* .pb1{
-  margin-left: 132px;
-}
-
-.vr1{
-  margin-left: 129px;
-}
-
-.vb1{
-  margin-left: 100px;
-} */
 
 .heading__bil{
   min-width: 403px;
@@ -463,7 +488,7 @@ color: white;
   width: 375px;
   height: 280px;
 }
-.ribbon{
+.ribbon-front{
   font: bold 23px sans-serif;
   color: #333;
   text-align: center;
@@ -475,8 +500,30 @@ color: white;
   /* padding: 19px 0; */
   top: 17px;
   right: -278px;
-  width: 126px;
+  width: 156px;
   height: 33px;
+  background-color: #ebb134;
+  color: #fff;
+  z-index: 999999;
+}
+
+.card {
+  overflow: hidden !important;
+}
+.ribbon-katalog {
+  font: bold 17px sans-serif;
+  color: #333;
+  text-align: center;
+  -webkit-transform: rotate(47deg);
+  -moz-transform: rotate(-45deg);
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  position: relative;
+  /* padding: 19px 0; */
+  right: -123px;
+  width: 190px;
+  top: 2px;
+  height: 25px;
   background-color: #ebb134;
   color: #fff;
   z-index: 999999;
@@ -494,6 +541,7 @@ margin-top: -34px;
   position: relative;
   text-align: center;
   padding: 10px 5px;
+  overflow: auto;
   /* margin-right: 150px; */
 }
 
@@ -630,3 +678,40 @@ top:20%;
 
 /* BANNER */
 
+
+/* ADMINISTRATION */
+
+.administration__form{
+  margin-left: 20px;
+  margin-top: 10px;
+}
+
+.admin_input{
+  display: block;
+  width: 350px;
+  height: 50px;
+  margin-bottom: 5px;
+}
+
+.forhandler-card {
+  display: flex;
+  margin: 15px;
+}
+
+
+.administration__forhandlere {
+  display: block;
+  padding-top: 5px;
+  text-align: center;
+  border: 1px solid #333;
+  width: 200px;
+  min-height: 10px;
+  margin-right: 10px;
+}
+
+
+/* OVERSIGT */
+.solg-btn{
+  padding: 0;
+  margin: 0;
+}
