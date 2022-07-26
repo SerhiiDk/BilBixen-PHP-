@@ -42,7 +42,8 @@ if(isset($_SESSION['loggedIn']))
     $resultAllebiler = mysqli_query($conn, $sqlAllebiler);
 
     if ($resultAllebiler) {
-      echo "<div class='card-context scrollmenu'>";
+      echo "<h1 class='oversigtHead'>Alle Biler</h1>";
+      echo "<div class='card-context scrollmenu containerOversigt'>";
       foreach($resultAllebiler as $row) {
         
         echo "<form class='card card-block' style='width: 18rem;' method='POST' action='bilOversigt.php'>";
@@ -74,8 +75,6 @@ if(isset($_SESSION['loggedIn']))
           echo "<button type='submit' class='btnOversigt__solgt oversigt-btn' name='btn-solgt'>Solgt</button>";
           echo "<br>";
         }
-
-
 
 
         // echo "<input class='logIn__input name' name='bilIdSlet' value=".$row['id']." />";
@@ -132,12 +131,13 @@ else
 
 echo "<br>";
 
-echo "<h4 class='bilOprettelse__heading'> Opret ny bil </h4>";
+// echo "<h4 > Opret ny bil </h4>";
 
 ?>
 
 <div class='bilOprettelse__form__block'>
 <form class="bilOprettelse__form" method='POST' action='bilOversigt.php' class="bilOprettelse__form">
+<h4 class='bilOprettelse__heading'>Opret ny bil </h4>
 <input type="text"  name="bilModel" class="bilOprettelse__input" placeholder="Model" required/>
 <input type="text"  name="bilPris" class="bilOprettelse__input"  placeholder="Pris" required />
 <input type="text"  name="bilKM" class="bilOprettelse__input"  placeholder="Kørt kilometer" required />
@@ -159,17 +159,30 @@ $dbForhandlerTabel = "forhandler";
 $sqlAlleForhandler  = "SELECT * FROM $dbForhandlerTabel";
 $resultAlleForhandler = mysqli_query($conn, $sqlAlleForhandler);
 
-echo "<select name='bilForhandler' class='bilOprettelse__select selectOversigt' required >";
-echo " <option value='' disabled selected>Forhandler</option>";
+$forhanlderLogind = $_SESSION['brugernavn'];
 
-foreach($resultAlleForhandler as $row) {
+$sqlForhandlerId  = "SELECT id FROM $dbForhandlerTabel WHERE navn = '$forhanlderLogind'";
+$resultForhandlerId = mysqli_query($conn, $sqlForhandlerId);
 
 
-  echo "<option value=".$row['id'].">".$row['navn']."</option>";
+// $dbForhandlerID = 
 
+
+if($_SESSION['rettigheder'] == 2) {
+
+  echo "<input class='bilOprettelse__input' name='bilForhandler' disabled value=".$_SESSION['brugernavn']."></input>";
 }
-echo "</select>";
+else {
+  echo "<select name='bilForhandler' class='bilOprettelse__select selectOversigt' required >";
+  echo " <option value='' disabled selected>Forhandler</option>";
+  foreach($resultAlleForhandler as $row) {
 
+
+    echo "<option value=".$row['id'].">".$row['navn']."</option>";
+  
+  }
+  echo "</select>";
+}
 ?>
 <!-- <select name="bilForhandler" class="bilOprettelse__select" required >
   <option value="" disabled selected>Forhandler</option>
@@ -203,7 +216,16 @@ if (isset($_POST['opretBil'])){
     $bilKørtKM = $_POST['bilKM'];
     $bilRegistrering = $_POST['bilRegistrering'];
     $bilType = $_POST['bilType'];
-    $bilForhandler = $_POST['bilForhandler'];
+
+    if($_SESSION['rettigheder'] == 2){
+      foreach($resultForhandlerId as $row1){
+        $bilForhandler = $row1['id'];
+      }
+    }
+    else {
+      $bilForhandler = $_POST['bilForhandler'];
+    }
+
     $bilStatus = $_POST['bilStatus'];
     $bilBillede = $_POST['bilBillede'];
 

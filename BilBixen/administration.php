@@ -32,45 +32,13 @@ if(isset($_SESSION['loggedIn']))
   if($_SESSION['rettigheder'] == 3)
   {
 
-    ?>
-    <form class="administration__form" method='POST' action='administration.php'>
-    <h4>Opret ny forhandler </h4>
-    <input type="text"  name="navn" class="forhandler__input admin_input" placeholder="Navn" required/>
-    <input type="email"  name="forhandlerEmail" class="forhandler__input admin_input"  placeholder="E-mail" required />
-    <input type="text"  name="brugernavn" class="forhandler__input admin_input" placeholder="brugernavn" required/>
-
-    <!-- rows="7" cols="63.2" -->
-    <button class="btn btn-primary btn-komm" type="submit" name='opretForhandler'>Opret</button>
-    </form>
-    </body>
-    </html>
-
-    <?php
-    if (isset($_POST['opretForhandler'])){  
-        $dbForhandlerTabel = "forhandler";
-        $navn = $_POST['navn'];
-        $forhandlerEmail =  $_POST['forhandlerEmail'];
-        $ForhandlerBrugernavn =  $_POST['brugernavn'];
-        $ForhandlerPassword = strrev($ForhandlerBrugernavn);
-
-        $sqlOpretForhandler = "INSERT INTO $dbForhandlerTabel (`id`, `navn`, `email`, `brugernavn`, `password`, `rettighedder`) VALUES (NULL, '$navn', '$forhandlerEmail', '$ForhandlerBrugernavn', '$ForhandlerPassword', '2')";
-
-        if(mysqli_query($conn, $sqlOpretForhandler)){
-
-        echo "<script>alert('Forhandleren er oprettet.')</script>";
-        }
-        else{
-        echo "<script>alert('Prøv igen senere.')</script>";
-        }
-    }  
-    
-    echo "<br><hr>";
-
     $dbForhandlerTabel = "forhandler";
-
     $sqlAlleForhandlere  = "SELECT * FROM $dbForhandlerTabel";
     $resultAlleForhandlere = mysqli_query($conn, $sqlAlleForhandlere);
-    echo "<div class='forhandler-card'>";
+
+    echo "<h1 style='text-align:center;'>Forhandlere</h1>";
+
+    echo "<div class='forhandler-card  scrollmenuOversigt containerOversigt '>";
     if ($resultAlleForhandlere) {
         foreach($resultAlleForhandlere as $row) {
             echo"<form class='administration__forhandlere' method='POST' action='administration.php'>";
@@ -99,12 +67,45 @@ if(isset($_SESSION['loggedIn']))
                 
             }
             echo "</form>";
+ 
             
         }
     }
     echo "</div>";
+    echo "<hr>";
+    ?>
+    <div style="display:flex;">
+    <form class="administration__form" method='POST' action='administration.php'>
+    <h4 style="text-align:center;" >Opret ny forhandler </h4>
+    <input type="text"  name="navn" class="forhandler__input admin_input" placeholder="Navn" required/>
+    <input type="email"  name="forhandlerEmail" class="forhandler__input admin_input"  placeholder="E-mail" required />
+    <input type="text"  name="brugernavn" class="forhandler__input admin_input" placeholder="brugernavn" required/>
 
+    <!-- rows="7" cols="63.2" -->
+    <button class="btn btn-primary btn-komm" type="submit" name='opretForhandler'>Opret</button>
+    </form>
+    </div>
+    </body>
+    </html>
 
+    <?php
+    if (isset($_POST['opretForhandler'])){  
+        $dbForhandlerTabel = "forhandler";
+        $navn = $_POST['navn'];
+        $forhandlerEmail =  $_POST['forhandlerEmail'];
+        $ForhandlerBrugernavn =  $_POST['brugernavn'];
+        $ForhandlerPassword = strrev($ForhandlerBrugernavn);
+
+        $sqlOpretForhandler = "INSERT INTO $dbForhandlerTabel (`id`, `navn`, `email`, `brugernavn`, `password`, `rettighedder`) VALUES (NULL, '$navn', '$forhandlerEmail', '$ForhandlerBrugernavn', '$ForhandlerPassword', '2')";
+
+        if(mysqli_query($conn, $sqlOpretForhandler)){
+
+        echo "<script>alert('Forhandleren er oprettet.')</script>";
+        }
+        else{
+        echo "<script>alert('Prøv igen senere.')</script>";
+        }
+    }  
   }
   else
   {
