@@ -227,7 +227,25 @@ if (isset($_POST['opretBil'])){
     }
 
     $bilStatus = $_POST['bilStatus'];
-    $bilBillede = $_POST['bilBillede'];
+    // $bilBillede = $_POST['bilBillede'];
+    $billedeNavn = $_POST['bilBillede'];
+    if(  $bilType   == 1){
+      $billedeLocationPersonBiler ="./img/Personbiler/";
+      $bilBillede = $billedeLocationPersonBiler.$billedeNavn;
+
+    }
+    elseif ($bilType  == 2)
+    {
+      $billedeLocationVareBiler ="./img/Varebiler/";
+      $bilBillede = $billedeLocationVareBiler.$billedeNavn;
+    }
+    else 
+    {  
+      $billedeLocationVrag ="./img/Vrag/";
+      $bilBillede = $billedeLocationVrag.$billedeNavn;
+
+    }
+    // ./img/Varebiler/Ford_Transit_100L_CL_2,5_D.jpg
 
     $sqlOpretBil = "INSERT INTO `biler`(`id`, `model`, `pris`, `kørt kilometer`, `først registreret`, `type`, `forhandler`, `status`, `billede`) VALUES (NULL,'$bilModel','$bilPris','$bilKørtKM','$bilRegistrering','$bilType','$bilForhandler','$bilStatus','$bilBillede')";
 
