@@ -114,10 +114,6 @@ if(isset($_SESSION['loggedIn']))
 }
 else
 {
-  echo "Du skal logge ind for at kunne se denne side";
+  echo "Du skal logge ind for at kunne se administration side";
 }
-
-
-
-
 ?>

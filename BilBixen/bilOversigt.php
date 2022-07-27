@@ -123,13 +123,7 @@ if(isset($_SESSION['loggedIn']))
   {
     echo "Du  har ikke rettighedderne til at se denne side";
   }
-}
-else
-{
-  echo "Du skal logge ind for at kunne se denne side";
-}
 
-echo "<br>";
 
 // echo "<h4 > Opret ny bil </h4>";
 
@@ -257,7 +251,13 @@ if (isset($_POST['opretBil'])){
     }
 }  
 
+}
+else
+{
+  echo "Du skal logge ind for at kunne se denne side";
+}
 
+echo "<br>";
 
 
 ?>
